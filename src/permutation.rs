@@ -17,6 +17,7 @@ where
     fn from(value: Vec<T>) -> Self {
         let factorials = (1..=value.len())
             .map(|x| x.factorial())
+            // for explanation of the reversal see the second paragraph below
             .rev()
             .collect();
 
@@ -31,20 +32,15 @@ where
 // This is an iterative implementation of Heap's Algorithm for finding all
 // permutations of a set (https://en.wikipedia.org/wiki/Heap's_algorithm). The
 // original relies on recursion to swap elements in the set. To make it work
-// iteratively I check if a counter is evenly divisible by N! where N is an
-// index of an item in the set. If this condition is fulfilled the first
-// and Nth members of the set are swapped.
-
-// There are some special cases:
-
-// let len = set.len(), 0 <= N < len, 0 <= counter < len!
+// iteratively I check if a counter is evenly divisible by N! where `0 <= N <
+// set.len()`. If this condition is fulfilled the Nth members of the set is
+// swapped with either the first item in the set or with one of the items that
+// come before it. This depends on weather the subset of length N has an even or
+// an odd number of elements.
 
 // if counter % N! == counter % len! == 0 we are done iterating
 
-// if counter % N!  == counter % (len - 1)! we swap the (counter / Nth) element
-// with the last one instead of swapping the first and the Nth
-
-// Additionally, since counter % 1! is always true and counter % 2! is true
+// Since `counter % 1! == 0` is always true and `counter % 2! == 0` is true
 // every other time we must check if N! divides the counter evenly in descending
 // order of N. Hence `Permutation.factorials` is reversed. However this also
 // means that `i` represents not the index, but `len - index`. Therefore when
@@ -56,8 +52,8 @@ where
     type Item = Vec<T>;
     fn next(&mut self) -> Option<Self::Item> {
         // We use a copy of the counter, because if `quot > 1` we need to only
-        // pass on the value of `modulo`. Hence the `tmp_counter = modulo` at
-        // the end of the loop
+        // pass on the value of `modulo` to the next iteration. Hence the
+        // `tmp_counter = modulo` at the end of the loop.
         let mut tmp_counter = self.counter;
         for (i, fac) in self.factorials.iter().enumerate() {
             let modulo = tmp_counter % fac;
@@ -65,8 +61,8 @@ where
             let len = self.v.len();
 
             // only make a swap if the counter value is divided evenly by
-            // `fac`. This way we make sure that we first permute a subset of 2
-            // elements, then 3, then 4 and so on.
+            // `fac`. There will always be a swap in the end, because `fac =
+            // self.factorials[n - 1] = 1`.
             if modulo == 0 && quot > 0 {
                 if i == 0 {
                     // the only way to divide `len.factorial()` evenly is for
