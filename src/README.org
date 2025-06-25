@@ -1,0 +1,14 @@
+#+title: combinatorics_iterators
+
+A tiny crate that provides an iterators for computing all permutations or
+combinations of a ~Vec<T>~. At this moment both iterators assume you have no
+duplicate values in the ~Vec~, if you do you can call ~Vec::dedup()~
+yourself. If it turns out that this is tedious I will add it to the
+constructors.
+
+* 🚧
+Currently this is more of a utility crate that I am using for another project,
+so I doubt development here will be super active. Anyway if I can add something
+you think is useful or improve any of the comments/explanations open an
+issue/PR.
+
