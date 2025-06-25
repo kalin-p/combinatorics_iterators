@@ -1,4 +1,5 @@
 mod permutation;
+mod combination;
 
 #[cfg(test)]
 mod tests {
@@ -8,7 +9,7 @@ mod tests {
     #[test]
     fn test_permutations() {
         let v = vec![1, 2, 3, 4];
-        // let perms = Permutation::from(v.clone());
+
         let all_perms: Vec<Vec<i32>> = Permutations::from(v.clone()).collect();
 
         assert_eq!(all_perms.len(), v.len().factorial());
@@ -19,5 +20,15 @@ mod tests {
             }
         }
 
+    }
+
+    use super::combination::Combinations;
+
+    #[test]
+    fn test_combinations() {
+        let v = vec![1, 2, 3, 4, 5];
+        for c in Combinations::new(v, 3).into_iter() {
+            println!("{:?}", c);
+        };
     }
 }
